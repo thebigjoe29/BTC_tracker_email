@@ -55,38 +55,23 @@ def delete_alert(request,alert_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_alerts(request,status):
-    
-    cache_key = f'alerts_{status}_page_{request.GET.get("page", 1)}'
-    
-    
-    cached_data = cache.get(cache_key)
-    if cached_data:
-        return Response(cached_data, status=status.HTTP_200_OK)
     alerts=Alert.objects.filter(status=status)
     paginator = PageNumberPagination()
     paginator.page_size = 10  
     result_page = paginator.paginate_queryset(alerts, request)
     serializer = AlertSerializer(result_page, many=True)
-    response_data = paginator.get_paginated_response(serializer.data)
-    cache.set(cache_key, response_data.data, timeout=60*15) 
     return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_all_alerts(request):    
-    cache_key = f'all_alerts_page_{request.GET.get("page", 1)}'
-    
-   
-    cached_data = cache.get(cache_key)
-    if cached_data:
-        return Response(cached_data, status=status.HTTP_200_OK)
+
     alerts=Alert.objects.all()
     paginator = PageNumberPagination()
     paginator.page_size = 10  
     result_page = paginator.paginate_queryset(alerts, request)
     serializer = AlertSerializer(result_page, many=True)
-    response_data = paginator.get_paginated_response(serializer.data)
-    cache.set(cache_key, response_data.data, timeout=60*15) 
+    
     return paginator.get_paginated_response(serializer.data)
 
 @csrf_exempt
