@@ -21,8 +21,8 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository_url>
-cd <repository_directory>
+git clone https://github.com/thebigjoe29/BTC_tracker_email.git
+cd BTC_tracker_email
 ```
 ### 2. Install requirements
 ```bash
